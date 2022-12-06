@@ -228,7 +228,7 @@ public class BankingApp extends JFrame
 		JLabel transferLabel2 = new JLabel("from");
 		JButton transferMoneyButton = new JButton("Transfer Money");
 		String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
-		JComboBox transferList = new JComboBox(transferOptions);
+		JComboBox<String> transferList = new JComboBox<>(transferOptions);
 		transferList.setSelectedIndex(1);
 		
 		transferPanel.add(transferLabel1);
