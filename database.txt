@@ -1,0 +1,70 @@
+USER
+userName: username1
+password: password1
+accountNumber: 1234567890
+routingNumber: 1234
+interestRate: 0.01
+interest52Weeks: 100
+savingsBalance: 200
+checkingBalance: 100
+savingsTransactions:
+1:
+description: Transfer from checking
+date: 11/23/22
+amount: 50
+2:
+description: Transfer from checking
+date: 12/03/22
+amount: 25
+checkingTransactions:
+1:
+description: Sent from 0987654321
+date: 11/20/22
+amount: 200
+2:
+description: Transfer to savings
+date: 11/23/22
+amount: -50
+3:
+description: Sent to 4567890123
+date: 11/26/22
+amount -50
+4:
+description: Transfer to checking
+date: 12/03/22
+amount: -25
+USER
+userName: username2
+password: password2
+accountNumber: 0987654321
+routingNumber: 1234
+interestRate: 0.01
+interest52Weeks: 100
+savingsBalance: 200
+checkingBalance: 100
+savingsTransactions:
+1:
+description: Transfer from checking
+date: 11/23/22
+amount: 50
+2:
+description: Transfer from checking
+date: 12/03/22
+amount: 25
+checkingTransactions:
+1:
+description: Sent from 0987654321
+date: 11/20/22
+amount: 200
+2:
+description: Transfer to savings
+date: 11/23/22
+amount: -50
+3:
+description: Sent to 4567890123
+date: 11/26/22
+amount -50
+4:
+description: Transfer to checking
+date: 12/03/22
+amount: -25
