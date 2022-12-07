@@ -1,5 +1,5 @@
 USER
-userName: username1
+username: username1
 password: password1
 accountNumber: 1234567890
 routingNumber: 1234
@@ -34,7 +34,7 @@ description: Transfer to checking
 date: 12/03/22
 amount: -25
 USER
-userName: username2
+username: username2
 password: password2
 accountNumber: 0987654321
 routingNumber: 1234
