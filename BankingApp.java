@@ -91,6 +91,7 @@ public class BankingApp extends JFrame
 	String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
 	JComboBox<String> transferList;
 	GridBagConstraints ts;
+	GridBagConstraints ls;
 
 	public BankingApp()  
 	{    
@@ -128,7 +129,7 @@ public class BankingApp extends JFrame
 		passPanel.add(passLabel);
 		passPanel.add(password);
 		
-		GridBagConstraints ls = new GridBagConstraints();
+		ls = new GridBagConstraints();
 		ls.gridx = 2;
 		ls.gridy = 0;
 		ls.gridwidth = 1;
