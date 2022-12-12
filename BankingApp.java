@@ -82,6 +82,16 @@ public class BankingApp extends JFrame
 	private JButton checkingButton;
 	private JButton transferButton;
 	private JButton exitButton;
+	GridBagConstraints sa;
+	JPanel transferPanel;
+	JLabel transferLabel1;
+	JTextField transferTextField;
+	JLabel transferLabel2;
+	JButton transferMoneyButton;
+	String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
+	JComboBox<String> transferList;
+	GridBagConstraints ts;
+
 	public BankingApp()  
 	{    
 		setTitle("Banking App Simulator");  
@@ -164,10 +174,10 @@ public class BankingApp extends JFrame
 						e.printStackTrace();
 					}
 				}
+				populatePanels();
 				update();
 				currCard = 2;
 				cObjl.show(cPanel, "" + (currCard));
-				btnPanel.setVisible(true);
 			}  
 		}
 	);  
@@ -193,6 +203,23 @@ public class BankingApp extends JFrame
 				// end main menu screen
 				
 				// start savings screen
+				//savings
+				accountInfoPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+				accountNumLabel = new JLabel("Account Number");
+				routingNumLabel = new JLabel("Routing Number");
+				IRLabel = new JLabel("Interest Rate");
+				IRALabel = new JLabel("Interest Accrued over 52 weeks");
+				avaliableBalLabel = new JLabel("Avaliable Balance");
+				accountNum = customer.getAccountNumber();
+				routingNum = customer.getRoutingNumber();
+				IR = customer.getInterestRate();
+				IRA = customer.getInterest52Weeks();
+				availableBal = customer.getSavingsBalance();
+				accountNumL = new JLabel(String.format("%s", accountNum));
+				routingNumL = new JLabel(String.format("%s", routingNum));
+				IRL = new JLabel(String.format("%.2f", IR));
+				IRAL = new JLabel(String.format("%.2f", IRA));
+				availableBalL = new JLabel(String.format("%.2f", availableBal));
 				// account info panel code
 	
 				accountInfoPanel.add(accountNumLabel);
@@ -207,6 +234,23 @@ public class BankingApp extends JFrame
 				accountInfoPanel.add(availableBalL);
 				
 				// recent transactions panel code
+				//savings recent trans
+				transactionHistPanelS = new JPanel(new GridLayout(3, 3, 5, 5));
+				recentTranLabelS = new JLabel("Recent Transactions");
+				dateLabelS = new JLabel("Date");
+				amountLabelS = new JLabel("Amount");
+				trans1S = "Transfer from Checkings to Savings"; // test
+				trans2S = "Transfer from Savings to Checkings"; // test
+				date1S = "10/11/22"; // test
+				date2S = "12/5/22"; // test
+				amount1S = 100.75; // test
+				amount2S = 205; // test
+				recentTranLabel1S = new JLabel(String.format("%s", trans1S));
+				dateLabel1S = new JLabel(String.format("%s", date1S));
+				amountLabel1S = new JLabel(String.format("%s", amount1S));
+				recentTranLabel2S = new JLabel(String.format("%s", trans2S));
+				dateLabel2S = new JLabel(String.format("%s", date2S));
+				amountLabel2S = new JLabel(String.format("%s", amount2S));
 				
 				transactionHistPanelS.add(recentTranLabelS);
 				transactionHistPanelS.add(dateLabelS);
@@ -218,7 +262,7 @@ public class BankingApp extends JFrame
 				transactionHistPanelS.add(dateLabel2S);
 				transactionHistPanelS.add(amountLabel2S);
 				
-				GridBagConstraints sa = new GridBagConstraints();
+				sa = new GridBagConstraints();
 				sa.gridx = 2;
 				sa.gridy = 0;
 				sa.gridwidth = 1;
@@ -236,6 +280,23 @@ public class BankingApp extends JFrame
 				// end savings screen
 				
 				// start checking screen
+				//checking recent trans
+				transactionHistPanelC = new JPanel(new GridLayout(3, 3, 20, 5));
+				recentTranLabelC = new JLabel("Recent Transactions");
+				dateLabelC = new JLabel("Date");
+				amountLabelC = new JLabel("Amount");
+				trans1C = "Transfer from Checkings to Savings"; // test
+				trans2C = "Transfer from Savings to Checkings"; // test
+				date1C = "9/21/22"; // test
+				date2C = "12/10/22"; // test
+				amount1C = 570.75; // test
+				amount2C = 295; // test
+				recentTranLabel1C = new JLabel(String.format("%s", trans1C));
+				dateLabel1C = new JLabel(String.format("%s", date1C));
+				amountLabel1C = new JLabel(String.format("%s", amount1C));
+				recentTranLabel2C = new JLabel(String.format("%s", trans2C));
+				dateLabel2C = new JLabel(String.format("%s", date2C));
+				amountLabel2C = new JLabel(String.format("%s", amount2C));
 				// transaction history code
 				transactionHistPanelC.add(recentTranLabelC);
 				transactionHistPanelC.add(dateLabelC);
@@ -246,6 +307,12 @@ public class BankingApp extends JFrame
 				transactionHistPanelC.add(recentTranLabel2C);
 				transactionHistPanelC.add(dateLabel2C);
 				transactionHistPanelC.add(amountLabel2C);
+				
+				//checking balance
+				accountBalPanelC = new JPanel(new GridLayout(1, 2, 20, 5));
+				accountBalC = customer.getCheckingBalance();
+				accountBalanceC = new JLabel(String.format("%s", accountBalC));
+				accountBalLabelC = new JLabel("Account Balance");
 				
 				accountBalPanelC.add(accountBalLabelC);
 				accountBalPanelC.add(accountBalanceC);
@@ -269,13 +336,12 @@ public class BankingApp extends JFrame
 				// end checking screen
 				
 				// start transfer screen
-				JPanel transferPanel = new JPanel();
-				JLabel transferLabel1 = new JLabel("Transfer $");
-				JTextField transferTextField = new JTextField("", 10);
-				JLabel transferLabel2 = new JLabel("from");
-				JButton transferMoneyButton = new JButton("Transfer Money");
-				String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
-				JComboBox<String> transferList = new JComboBox<>(transferOptions);
+				transferPanel = new JPanel();
+				transferLabel1 = new JLabel("Transfer $");
+				transferTextField = new JTextField("", 10);
+				transferLabel2 = new JLabel("from");
+				transferMoneyButton = new JButton("Transfer Money");
+				transferList = new JComboBox<>(transferOptions);
 				transferList.setSelectedIndex(1);
 				
 				transferPanel.add(transferLabel1);
@@ -285,8 +351,7 @@ public class BankingApp extends JFrame
 				transferPanel.add(transferMoneyButton);
 				
 				
-				GridBagConstraints ts = new GridBagConstraints();
-				
+				ts = new GridBagConstraints();
 				ts.gridx = 2;
 				ts.gridy = 0;
 				ts.gridwidth = 3;
@@ -320,7 +385,6 @@ public class BankingApp extends JFrame
 				btnPanel.add(exitButton); 
 				   
 				getContentPane().add(btnPanel, BorderLayout.SOUTH); 
-				btnPanel.setVisible(false);
 				
 				// button listeners
 				savingsButton.addActionListener(new ActionListener()  
@@ -392,65 +456,10 @@ public class BankingApp extends JFrame
 	}
 	
 	public void update() {
-		//savings
-		accountInfoPanel = new JPanel(new GridLayout(5, 2, 10, 10));
-		accountNumLabel = new JLabel("Account Number");
-		routingNumLabel = new JLabel("Routing Number");
-		IRLabel = new JLabel("Interest Rate");
-		IRALabel = new JLabel("Interest Accrued over 52 weeks");
-		avaliableBalLabel = new JLabel("Avaliable Balance");
-		accountNum = customer.getAccountNumber();
-		routingNum = customer.getRoutingNumber();
-		IR = customer.getInterestRate();
-		IRA = customer.getInterest52Weeks();
-		availableBal = customer.getSavingsBalance();
-		accountNumL = new JLabel(String.format("%s", accountNum));
-		routingNumL = new JLabel(String.format("%s", routingNum));
-		IRL = new JLabel(String.format("%.2f", IR));
-		IRAL = new JLabel(String.format("%.2f", IRA));
-		availableBalL = new JLabel(String.format("%.2f", availableBal));
 		
-		//savings recent trans
-		transactionHistPanelS = new JPanel(new GridLayout(3, 3, 5, 5));
-		recentTranLabelS = new JLabel("Recent Transactions");
-		dateLabelS = new JLabel("Date");
-		amountLabelS = new JLabel("Amount");
-		trans1S = "Transfer from Checkings to Savings"; // test
-		trans2S = "Transfer from Savings to Checkings"; // test
-		date1S = "10/11/22"; // test
-		date2S = "12/5/22"; // test
-		amount1S = 100.75; // test
-		amount2S = 205; // test
-		recentTranLabel1S = new JLabel(String.format("%s", trans1S));
-		dateLabel1S = new JLabel(String.format("%s", date1S));
-		amountLabel1S = new JLabel(String.format("%s", amount1S));
-		recentTranLabel2S = new JLabel(String.format("%s", trans2S));
-		dateLabel2S = new JLabel(String.format("%s", date2S));
-		amountLabel2S = new JLabel(String.format("%s", amount2S));
-		
-		//checking recent trans
-		transactionHistPanelC = new JPanel(new GridLayout(3, 3, 20, 5));
-		recentTranLabelC = new JLabel("Recent Transactions");
-		dateLabelC = new JLabel("Date");
-		amountLabelC = new JLabel("Amount");
-		trans1C = "Transfer from Checkings to Savings"; // test
-		trans2C = "Transfer from Savings to Checkings"; // test
-		date1C = "9/21/22"; // test
-		date2C = "12/10/22"; // test
-		amount1C = 570.75; // test
-		amount2C = 295; // test
-		recentTranLabel1C = new JLabel(String.format("%s", trans1C));
-		dateLabel1C = new JLabel(String.format("%s", date1C));
-		amountLabel1C = new JLabel(String.format("%s", amount1C));
-		recentTranLabel2C = new JLabel(String.format("%s", trans2C));
-		dateLabel2C = new JLabel(String.format("%s", date2C));
-		amountLabel2C = new JLabel(String.format("%s", amount2C));
-		
-		//checking balance
-		accountBalPanelC = new JPanel(new GridLayout(1, 2, 20, 5));
-		accountBalC = customer.getCheckingBalance();
-		accountBalanceC = new JLabel(String.format("%s", accountBalC));
-		accountBalLabelC = new JLabel("Account Balance");
+		availableBalL.setText(String.format("%.2f", customer.getSavingsBalance()));
+		accountBalanceC.setText(String.format("%.2f", customer.getCheckingBalance()));
+
 	}
 	  
 	// main method  
