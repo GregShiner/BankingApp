@@ -92,6 +92,7 @@ public class BankingApp extends JFrame
 	JComboBox<String> transferList;
 	GridBagConstraints ts;
 	GridBagConstraints ls;
+	JLabel loginErrorMsg;
 
 	public BankingApp()  
 	{    
@@ -120,6 +121,8 @@ public class BankingApp extends JFrame
 		JLabel passLabel = new JLabel("Password");
 		JPanel userPanel = new JPanel();
 		JPanel passPanel = new JPanel();
+		loginErrorMsg = new JLabel("Username or Password Invalid!");
+		loginErrorMsg.setForeground(Color.RED);
 		
 		username = new JTextField(10);
 		password = new JTextField(10);
@@ -148,7 +151,14 @@ public class BankingApp extends JFrame
 		ls.gridx = 0;
 		ls.gridy = 3;
 		ls.gridwidth = 3;
-		jPanel1.add(loginButton, ls);	
+		jPanel1.add(loginButton, ls);
+		
+		ls.gridx = 0;
+		ls.gridy = 4;
+		ls.gridwidth = 3;
+		jPanel1.add(loginErrorMsg, ls);	
+		loginErrorMsg.setVisible(false);
+		
 		// end code for login screen
 		
 		// adds all panels to card
@@ -171,7 +181,7 @@ public class BankingApp extends JFrame
 						customer = new Customer(username.getText(), password.getText());
 						break;
 					} catch (Exception e) {
-						// TODO: add failure message
+						loginErrorMsg.setVisible(true);
 						e.printStackTrace();
 					}
 				}
