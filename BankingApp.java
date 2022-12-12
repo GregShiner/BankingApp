@@ -1,6 +1,8 @@
 import java.awt.*;  
 import java.awt.event.ActionEvent;  
-import java.awt.event.ActionListener;  
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+
 import javax.swing.*;  
   
 public class BankingApp extends JFrame   
@@ -452,11 +454,14 @@ public class BankingApp extends JFrame
 				{  
 					public void actionPerformed(ActionEvent ae)  
 					{   
-						if (transferList.getSelectedIndex() == 0) {
-							customer.transferMoney(Double.parseDouble(transferTextField.getText()), "savings");
-						}
-						else if (transferList.getSelectedIndex() == 1) {
-							customer.transferMoney(Double.parseDouble(transferTextField.getText()), "checking");
+						// toAccount = savings if 0, else checking with ternary operator
+						String toAccount = (transferList.getSelectedIndex() == 0) ? "savings" : "checking";
+						try {
+							customer.transferMoney(transferTextField.getText(), toAccount);
+						} catch (FileNotFoundException | IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							// TODO handle exceptions
+							// use e.getMessage() to get error message
 						}
 						update();
 					}  

@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
@@ -20,12 +21,12 @@ public class Customer {
     private ArrayList<Transaction> savingsTransactions; // transactions for savings account
     private ArrayList<Transaction> checkingTransactions; // transactions for checking account
     private final int userStartLine; // line number in database.txt where user info starts (this starts at the username line)
-    public Customer(String userName, String password) throws Exception {
+    public Customer(String userName, String password) throws IllegalArgumentException, IOException {
         userStartLine = authenticate(userName, password);
         if (userStartLine == -1) {
-            throw new Exception("Invalid username or password!");
+            throw new IllegalArgumentException("Invalid username or password!");
         } else if (userStartLine == -2) {
-            throw new Exception("Database file not found! (database.txt)");
+            throw new FileNotFoundException("Database file not found! (database.txt)");
         }
         try (BufferedReader reader = new BufferedReader(new FileReader("database.txt"))) {
             for (int i = 0; i < userStartLine + 1; i++) { // go 1 line past userStartLine because we don't need the username and password
@@ -95,7 +96,9 @@ public class Customer {
                 this.checkingTransactions.add(new Transaction(description, date, amount));
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Database file not found! (database.txt)");
+            throw new FileNotFoundException("Database file not found! (database.txt)");
+        } catch (IOException e) {
+            throw new IOException("Error reading from database file! (database.txt)");
         }
         System.out.println("Done!");
     }
@@ -165,7 +168,7 @@ public class Customer {
     public ArrayList<Transaction> getCheckingTransactions() {
         return this.checkingTransactions;
     }
-    public void changeValue(String username, String field, String newValue) {
+    private void changeValue(String username, String field, String newValue) {
         ArrayList<String> lines = new ArrayList<String>();
         try (Scanner scanner = new Scanner(new File("database.txt"))) {
             // read entire file into arraylist
@@ -205,7 +208,7 @@ public class Customer {
             System.out.println("Database file not found! (database.txt)");
         }
     }
-    public void addTransaction(Transaction transaction, String username, String account) {
+    public void addTransaction(Transaction transaction, String username, String account) throws FileNotFoundException {
         // read entire data base into string array
         ArrayList<String> lines = new ArrayList<String>();
         try (Scanner scanner = new Scanner(new File("database.txt"))) {
@@ -256,7 +259,7 @@ public class Customer {
                 writer.println(line);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Database file not found! (database.txt)");
+            throw new FileNotFoundException("Database file not found! (database.txt)");
         }
     }
     public void setSavingBalance(double newBalance) {
@@ -273,25 +276,35 @@ public class Customer {
     public void setCheckingBalance(String username, double newBalance) {
         this.changeValue(username, "checkingBalance", Double.toString(newBalance));
     }
-    public void transferMoney(double amount, String to) {
+    public void transferMoney(String amount, String to) throws FileNotFoundException, IllegalArgumentException {
         // transfer money between checking and savings account of the current user
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
+        // check that the input is a positive number
+        Double amountDouble;
+        try {
+            amountDouble = Double.parseDouble(amount);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid input! Please enter a positive number.");
+        }
+        if (amountDouble <= 0) {
+            throw new IllegalArgumentException("Invalid input! Please enter a positive number.");
+        }
         if (to.equals("checking")) {
-            this.setSavingBalance(this.getSavingsBalance() - amount);
-            Transaction savingsTransaction = new Transaction("Transfer to checking", dtf.format(LocalDateTime.now()), -amount);
+            this.setSavingBalance(this.getSavingsBalance() - amountDouble);
+            Transaction savingsTransaction = new Transaction("Transfer to checking", dtf.format(LocalDateTime.now()), -amountDouble);
             this.savingsTransactions.add(savingsTransaction);
             addTransaction(savingsTransaction, this.username, "savings");
-            this.setCheckingBalance(this.getCheckingBalance() + amount);
-            Transaction checkingTransaction = new Transaction("Transfer from savings", dtf.format(LocalDateTime.now()), amount);
+            this.setCheckingBalance(this.getCheckingBalance() + amountDouble);
+            Transaction checkingTransaction = new Transaction("Transfer from savings", dtf.format(LocalDateTime.now()), amountDouble);
             this.checkingTransactions.add(checkingTransaction);
             addTransaction(checkingTransaction, this.username, "checking");
         } else if (to.equals("savings")) {
-            this.setCheckingBalance(this.getCheckingBalance() - amount);
-            Transaction checkingTransaction = new Transaction("Transfer to savings", dtf.format(LocalDateTime.now()), -amount);
+            this.setCheckingBalance(this.getCheckingBalance() - amountDouble);
+            Transaction checkingTransaction = new Transaction("Transfer to savings", dtf.format(LocalDateTime.now()), -amountDouble);
             this.checkingTransactions.add(checkingTransaction);
             addTransaction(checkingTransaction, this.username, "checking");
-            this.setSavingBalance(this.getSavingsBalance() + amount);
-            Transaction savingsTransaction = new Transaction("Transfer from checking", dtf.format(LocalDateTime.now()), amount);
+            this.setSavingBalance(this.getSavingsBalance() + amountDouble);
+            Transaction savingsTransaction = new Transaction("Transfer from checking", dtf.format(LocalDateTime.now()), amountDouble);
             this.savingsTransactions.add(savingsTransaction);
             addTransaction(savingsTransaction, this.username, "savings");
         }
@@ -329,7 +342,7 @@ public class Customer {
         }
         return null;
     }
-    public void sendMoney(String destinationUsername, double amount) {
+    public void sendMoney(String destinationUsername, double amount) throws FileNotFoundException {
         // send money to a different user's checking account from the current user's checking account
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
         this.setCheckingBalance(this.getCheckingBalance() - amount);
