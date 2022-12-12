@@ -6,7 +6,7 @@ routingNumber: 1234
 interestRate: 0.01
 interest52Weeks: 100
 savingsBalance: 200
-checkingBalance: 200.0
+checkingBalance: 100
 savingsTransactions:
 transaction:
 description: Transfer from checking
@@ -34,10 +34,6 @@ transaction:
 description: Transfer to checking
 date: 12/03/22
 amount: -25
-transaction:
-description:Transfer from username2
-date:12/12/22
-amount:100.0
 END
 USER
 username: username2
@@ -46,7 +42,7 @@ accountNumber: 0987654321
 routingNumber: 1234
 interestRate: 0.01
 interest52Weeks: 100
-savingsBalance: 100.0
+savingsBalance: 200.0
 checkingBalance: 100.0
 savingsTransactions:
 transaction:
@@ -57,10 +53,6 @@ transaction:
 description: Transfer from checking
 date: 12/03/22
 amount: 25
-transaction:
-description:Transfer to checking
-date:12/12/22
-amount:-100.0
 END
 checkingTransactions:
 transaction:
@@ -79,12 +71,4 @@ transaction:
 description: Transfer to checking
 date: 12/03/22
 amount: -25
-transaction:
-description:Transfer from savings
-date:12/12/22
-amount:100.0
-transaction:
-description:Transfer to username1
-date:12/12/22
-amount:-100.0
 END
