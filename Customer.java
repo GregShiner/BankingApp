@@ -20,7 +20,9 @@ public class Customer {
     private double checkingBalance;
     private ArrayList<Transaction> savingsTransactions; // transactions for savings account
     private ArrayList<Transaction> checkingTransactions; // transactions for checking account
-    private final int userStartLine; // line number in database.txt where user info starts (this starts at the username line)
+    private final int userStartLine; // line number in database.txt where user info starts (this starts at the
+                                     // username line)
+
     public Customer(String userName, String password) throws IllegalArgumentException, IOException {
         userStartLine = authenticate(userName, password);
         if (userStartLine == -1) {
@@ -29,7 +31,8 @@ public class Customer {
             throw new FileNotFoundException("Database file not found! (database.txt)");
         }
         try (BufferedReader reader = new BufferedReader(new FileReader("database.txt"))) {
-            for (int i = 0; i < userStartLine + 1; i++) { // go 1 line past userStartLine because we don't need the username and password
+            for (int i = 0; i < userStartLine + 1; i++) { // go 1 line past userStartLine because we don't need the
+                                                          // username and password
                 reader.readLine();
             }
             // mark the position on the buffered reader
@@ -68,7 +71,7 @@ public class Customer {
                 if (line.equals("transaction:") || line.equals("END")) {
                     continue;
                 }
-                if (line.equals("checkingTransactions:")){
+                if (line.equals("checkingTransactions:")) {
                     break;
                 }
                 String description = line.split(": ")[1];
@@ -82,7 +85,7 @@ public class Customer {
             this.checkingTransactions = new ArrayList<Transaction>();
             while (true) {
                 line = reader.readLine();
-                if (line == null || line.equals("USER")){
+                if (line == null || line.equals("USER")) {
                     break;
                 }
                 if (line.equals("transaction:") || line.equals("END")) {
@@ -102,6 +105,7 @@ public class Customer {
         }
         System.out.println("Done!");
     }
+
     private int authenticate(String username, String password) {
         // read from file
         int userStartLine = 0;
@@ -114,7 +118,7 @@ public class Customer {
                 String line = scanner.nextLine();
                 // check for username line
                 String[] splitLine = line.split(": ");
-                if (splitLine[0].equals("username")){
+                if (splitLine[0].equals("username")) {
                     if (!splitLine[1].equals(username)) {
                         continue;
                     }
@@ -130,7 +134,7 @@ public class Customer {
                 }
             }
             return -1; // invalid username or password
-            // write to file 
+            // write to file
         } catch (FileNotFoundException e) {
             System.out.println("Database file not found! (database.txt)");
             return -2; // database file not found
@@ -138,36 +142,47 @@ public class Customer {
             scanner.close();
         }
     }
+
     public String getUserName() {
-        return this.username;        
+        return this.username;
     }
+
     public String getPassword() {
         return this.password;
     }
+
     public int getAccountNumber() {
         return this.accountNumber;
     }
+
     public int getRoutingNumber() {
         return this.routingNumber;
     }
+
     public double getInterestRate() {
         return this.interestRate;
     }
+
     public double getInterest52Weeks() {
         return this.interest52Weeks;
     }
+
     public double getSavingsBalance() {
         return this.savingsBalance;
     }
+
     public double getCheckingBalance() {
         return this.checkingBalance;
     }
+
     public ArrayList<Transaction> getSavingsTransactions() {
         return this.savingsTransactions;
     }
+
     public ArrayList<Transaction> getCheckingTransactions() {
         return this.checkingTransactions;
     }
+
     private void changeValue(String username, String field, String newValue) {
         ArrayList<String> lines = new ArrayList<String>();
         try (Scanner scanner = new Scanner(new File("database.txt"))) {
@@ -208,6 +223,7 @@ public class Customer {
             System.out.println("Database file not found! (database.txt)");
         }
     }
+
     public void addTransaction(Transaction transaction, String username, String account) throws FileNotFoundException {
         // read entire data base into string array
         ArrayList<String> lines = new ArrayList<String>();
@@ -262,20 +278,25 @@ public class Customer {
             throw new FileNotFoundException("Database file not found! (database.txt)");
         }
     }
+
     public void setSavingBalance(double newBalance) {
         this.savingsBalance = newBalance;
         this.changeValue(this.username, "savingsBalance", Double.toString(newBalance));
     }
+
     public void setSavingBalance(String username, double newBalance) {
         this.changeValue(username, "savingsBalance", Double.toString(newBalance));
     }
+
     public void setCheckingBalance(double newBalance) {
         this.checkingBalance = newBalance;
         this.changeValue(this.username, "checkingBalance", Double.toString(newBalance));
     }
+
     public void setCheckingBalance(String username, double newBalance) {
         this.changeValue(username, "checkingBalance", Double.toString(newBalance));
     }
+
     public void transferMoney(String amount, String to) throws FileNotFoundException, IllegalArgumentException {
         // transfer money between checking and savings account of the current user
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
@@ -291,24 +312,29 @@ public class Customer {
         }
         if (to.equals("checking")) {
             this.setSavingBalance(this.getSavingsBalance() - amountDouble);
-            Transaction savingsTransaction = new Transaction("Transfer to checking", dtf.format(LocalDateTime.now()), -amountDouble);
+            Transaction savingsTransaction = new Transaction("Transfer to checking", dtf.format(LocalDateTime.now()),
+                    -amountDouble);
             this.savingsTransactions.add(savingsTransaction);
             addTransaction(savingsTransaction, this.username, "savings");
             this.setCheckingBalance(this.getCheckingBalance() + amountDouble);
-            Transaction checkingTransaction = new Transaction("Transfer from savings", dtf.format(LocalDateTime.now()), amountDouble);
+            Transaction checkingTransaction = new Transaction("Transfer from savings", dtf.format(LocalDateTime.now()),
+                    amountDouble);
             this.checkingTransactions.add(checkingTransaction);
             addTransaction(checkingTransaction, this.username, "checking");
         } else if (to.equals("savings")) {
             this.setCheckingBalance(this.getCheckingBalance() - amountDouble);
-            Transaction checkingTransaction = new Transaction("Transfer to savings", dtf.format(LocalDateTime.now()), -amountDouble);
+            Transaction checkingTransaction = new Transaction("Transfer to savings", dtf.format(LocalDateTime.now()),
+                    -amountDouble);
             this.checkingTransactions.add(checkingTransaction);
             addTransaction(checkingTransaction, this.username, "checking");
             this.setSavingBalance(this.getSavingsBalance() + amountDouble);
-            Transaction savingsTransaction = new Transaction("Transfer from checking", dtf.format(LocalDateTime.now()), amountDouble);
+            Transaction savingsTransaction = new Transaction("Transfer from checking", dtf.format(LocalDateTime.now()),
+                    amountDouble);
             this.savingsTransactions.add(savingsTransaction);
             addTransaction(savingsTransaction, this.username, "savings");
         }
     }
+
     public String getUserField(String username, String field) {
         // read entire data base into string array
         ArrayList<String> lines = new ArrayList<String>();
@@ -342,15 +368,20 @@ public class Customer {
         }
         return null;
     }
+
     public void sendMoney(String destinationUsername, double amount) throws FileNotFoundException {
-        // send money to a different user's checking account from the current user's checking account
+        // send money to a different user's checking account from the current user's
+        // checking account
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
         this.setCheckingBalance(this.getCheckingBalance() - amount);
-        Transaction transaction = new Transaction("Transfer to " + destinationUsername, dtf.format(LocalDateTime.now()), -amount);
+        Transaction transaction = new Transaction("Transfer to " + destinationUsername, dtf.format(LocalDateTime.now()),
+                -amount);
         this.checkingTransactions.add(transaction);
         addTransaction(transaction, this.username, "checking");
-        this.setCheckingBalance(destinationUsername, Double.parseDouble(getUserField(destinationUsername, "checkingBalance")) + amount);
-        Transaction transaction2 = new Transaction("Transfer from " + this.username, dtf.format(LocalDateTime.now()), amount);
+        this.setCheckingBalance(destinationUsername,
+                Double.parseDouble(getUserField(destinationUsername, "checkingBalance")) + amount);
+        Transaction transaction2 = new Transaction("Transfer from " + this.username, dtf.format(LocalDateTime.now()),
+                amount);
         addTransaction(transaction2, destinationUsername, "checking");
     }
 }
