@@ -85,27 +85,45 @@ public class BankingApp extends JFrame
 	private JButton checkingButton;
 	private JButton transferButton;
 	private JButton exitButton;
-	GridBagConstraints sa;
-	JPanel transferPanel;
-	JLabel transferLabel1;
-	JTextField transferTextField;
-	JLabel transferLabel2;
-	JButton transferMoneyButton;
-	String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
-	JComboBox<String> transferList;
-	GridBagConstraints ts;
-	GridBagConstraints ls;
-	JLabel loginErrorMsg;
+	private GridBagConstraints sa;
+	private JPanel transferPanel;
+	private JLabel transferLabel1;
+	private JTextField transferTextField;
+	private JLabel transferLabel2;
+	private JButton transferMoneyButton;
+	private String[] transferOptions = {"Checking to Saving", "Saving to Checking"};
+	private JComboBox<String> transferList;
+	private GridBagConstraints ts;
+	private GridBagConstraints ls;
+	private JLabel loginErrorMsg;
+	private JLabel transferValMsg = new JLabel();
+	private JLabel rtsDescription1;
+	private JLabel rtsDescription2;
+	private JLabel rtsDescription3;
+	private JLabel rtcDescription1;
+	private JLabel rtcDescription2;
+	private JLabel rtcDescription3;
+	private JLabel rtsDate1;
+	private JLabel rtsDate2;
+	private JLabel rtsDate3;
+	private JLabel rtcDate1;
+	private JLabel rtcDate2;
+	private JLabel rtcDate3;
+	private JLabel rtsAmt1;
+	private JLabel rtsAmt2;
+	private JLabel rtsAmt3;
+	private JLabel rtcAmt1;
+	private JLabel rtcAmt2;
+	private JLabel rtcAmt3;
 
 	public BankingApp()  
 	{    
 		setTitle("Banking App Simulator");  
-		setSize(800, 300);   
+		setSize(800, 400);   
 		cPanel = new JPanel();   
 		cObjl = new CardLayout();   
 		cPanel.setLayout(cObjl);  
 		
-		//JPanel jPanel1 = new JPanel(new GridLayout(4, 3));  
 		jPanel1 = new JPanel(new GridBagLayout()); 
 		jPanel2 = new JPanel(new GridBagLayout());   
 		jPanel3 = new JPanel(new GridBagLayout()); 
@@ -178,21 +196,18 @@ public class BankingApp extends JFrame
 		{  
 			public void actionPerformed(ActionEvent ae)  
 			{   
-				while (true) {
-
-					try {
-						customer = new Customer(username.getText(), password.getText());
-						break;
-					} catch (IllegalArgumentException | IOException e) {
-						loginErrorMsg.setVisible(true);
-						e.printStackTrace();
-					}
+				try {
+					customer = new Customer(username.getText(), password.getText());
+				} catch (IllegalArgumentException | IOException e) {
+					loginErrorMsg.setVisible(true);
+					return;
 				}
-				populatePanels();
-				update();
-				currCard = 2;
-				cObjl.show(cPanel, "" + (currCard));
-			}  
+			
+			populatePanels();
+			update();
+			currCard = 2;
+			cObjl.show(cPanel, "" + (currCard));
+		}  
 		}
 	);  
 	}  
@@ -249,7 +264,7 @@ public class BankingApp extends JFrame
 				
 				// recent transactions panel code
 				//savings recent trans
-				transactionHistPanelS = new JPanel(new GridLayout(3, 3, 5, 5));
+				transactionHistPanelS = new JPanel(new GridLayout(6, 3, 5, 5));
 				recentTranLabelS = new JLabel("Recent Transactions");
 				dateLabelS = new JLabel("Date");
 				amountLabelS = new JLabel("Amount");
@@ -295,7 +310,7 @@ public class BankingApp extends JFrame
 				
 				// start checking screen
 				//checking recent trans
-				transactionHistPanelC = new JPanel(new GridLayout(3, 3, 20, 5));
+				transactionHistPanelC = new JPanel(new GridLayout(6, 3, 20, 5));
 				recentTranLabelC = new JLabel("Recent Transactions");
 				dateLabelC = new JLabel("Date");
 				amountLabelC = new JLabel("Amount");
@@ -375,6 +390,11 @@ public class BankingApp extends JFrame
 				ts.gridy = 2;
 				ts.gridwidth = 3;
 				jPanel5.add(transferPanel, ts);
+				
+				ts.gridx = 2;
+				ts.gridy = 3;
+				ts.gridwidth = 3;
+				jPanel5.add(transferValMsg, ts);
 				// end transfer screen
 				
 				
@@ -444,6 +464,7 @@ public class BankingApp extends JFrame
 						{   
 							if (currCard != 5)   
 							{  		  
+								transferValMsg.setVisible(false);
 								currCard = 5;  
 								cObjl.show(cPanel, "" + (currCard));  
 							}  
@@ -459,10 +480,13 @@ public class BankingApp extends JFrame
 						String toAccount = (transferList.getSelectedIndex() == 0) ? "savings" : "checking";
 						try {
 							customer.transferMoney(transferTextField.getText(), toAccount);
+							transferValMsg.setText("Transfer Success!");
+							transferValMsg.setForeground(Color.GREEN);
+							transferValMsg.setVisible(true);
 						} catch (FileNotFoundException | IllegalArgumentException e) {
-							// TODO Auto-generated catch block
-							// TODO handle exceptions
-							// use e.getMessage() to get error message
+							transferValMsg.setText(e.getMessage());
+							transferValMsg.setForeground(Color.RED);
+							transferValMsg.setVisible(true);
 						}
 						update();
 					}  
