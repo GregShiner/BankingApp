@@ -43,34 +43,10 @@ public class BankingApp extends JFrame {
 	private JLabel recentTranLabelS;
 	private JLabel dateLabelS;
 	private JLabel amountLabelS;
-	private String trans1S;
-	private String trans2S;
-	private String date1S;
-	private String date2S;
-	private double amount1S;
-	private double amount2S;
-	private JLabel recentTranLabel1S;
-	private JLabel dateLabel1S;
-	private JLabel amountLabel1S;
-	private JLabel recentTranLabel2S;
-	private JLabel dateLabel2S;
-	private JLabel amountLabel2S;
 	private JPanel transactionHistPanelC;
 	private JLabel recentTranLabelC;
 	private JLabel dateLabelC;
 	private JLabel amountLabelC;
-	private String trans1C;
-	private String trans2C;
-	private String date1C;
-	private String date2C;
-	private double amount1C;
-	private double amount2C;
-	private JLabel recentTranLabel1C;
-	private JLabel dateLabel1C;
-	private JLabel amountLabel1C;
-	private JLabel recentTranLabel2C;
-	private JLabel dateLabel2C;
-	private JLabel amountLabel2C;
 	private JPanel accountBalPanelC;
 	private double accountBalC;
 	private JLabel accountBalanceC;
@@ -239,7 +215,7 @@ public class BankingApp extends JFrame {
 
 		// recent transactions panel code
 		// savings recent transactions
-		transactionHistPanelS = new JPanel(new GridLayout(6, 3, 5, 5));
+		transactionHistPanelS = new JPanel(new GridLayout(4, 3, 20, 5));
 		recentTranLabelS = new JLabel("Recent Transactions");
 		dateLabelS = new JLabel("Date");
 		amountLabelS = new JLabel("Amount");
@@ -274,7 +250,7 @@ public class BankingApp extends JFrame {
 
 		// start checking screen
 		// checking recent trans
-		transactionHistPanelC = new JPanel(new GridLayout(6, 3, 20, 5));
+		transactionHistPanelC = new JPanel(new GridLayout(4, 3, 20, 5));
 		recentTranLabelC = new JLabel("Recent Transactions");
 		dateLabelC = new JLabel("Date");
 		amountLabelC = new JLabel("Amount");
@@ -308,12 +284,12 @@ public class BankingApp extends JFrame {
 		cs.gridx = 2;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
-		jPanel4.add(transactionHistPanelC, cs);
+		jPanel4.add(accountBalPanelC, cs);
 
 		cs.gridx = 2;
 		cs.gridy = 2;
 		cs.gridwidth = 3;
-		jPanel4.add(accountBalPanelC, cs);
+		jPanel4.add(transactionHistPanelC, cs);
 		// end checking screen
 
 		// start transfer screen
