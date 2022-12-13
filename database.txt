@@ -5,8 +5,8 @@ accountNumber: 1234567890
 routingNumber: 1234
 interestRate: 0.01
 interest52Weeks: 100
-savingsBalance: 200
-checkingBalance: 100
+savingsBalance: 210.0
+checkingBalance: 190.0
 savingsTransactions:
 transaction:
 description: Transfer from checking
@@ -16,10 +16,30 @@ transaction:
 description: Transfer from checking
 date: 12/03/22
 amount: 25
+transaction:
+description: Transfer from checking
+date: 12/06/22
+amount: 25
+transaction:
+description: Transfer to checking
+date: 12/13/22
+amount: -50.0
+transaction:
+description: Transfer to checking
+date: 12/13/22
+amount: -100.0
+transaction:
+description: Transfer from checking
+date: 12/13/22
+amount: 50.0
+transaction:
+description: Transfer from checking
+date: 12/13/22
+amount: 60.0
 END
 checkingTransactions:
 transaction:
-description: Sent from 0987654321
+description: Transfer from savings
 date: 11/20/22
 amount: 200
 transaction:
@@ -27,13 +47,29 @@ description: Transfer to savings
 date: 11/23/22
 amount: -50
 transaction:
-description: Sent to 4567890123
+description: Transfer to savings
 date: 11/26/22
 amount: -50
 transaction:
 description: Transfer to checking
 date: 12/03/22
 amount: -25
+transaction:
+description: Transfer from savings
+date: 12/13/22
+amount: 50.0
+transaction:
+description: Transfer from savings
+date: 12/13/22
+amount: 100.0
+transaction:
+description: Transfer to savings
+date: 12/13/22
+amount: -50.0
+transaction:
+description: Transfer to savings
+date: 12/13/22
+amount: -60.0
 END
 USER
 username: username2
@@ -42,8 +78,8 @@ accountNumber: 0987654321
 routingNumber: 1234
 interestRate: 0.01
 interest52Weeks: 100
-savingsBalance: 200.0
-checkingBalance: 100.0
+savingsBalance: 315.0
+checkingBalance: 85.0
 savingsTransactions:
 transaction:
 description: Transfer from checking
@@ -53,6 +89,22 @@ transaction:
 description: Transfer from checking
 date: 12/03/22
 amount: 25
+transaction:
+description: Transfer from checking
+date: 12/03/22
+amount: 25
+transaction:
+description: Transfer to checking
+date: 12/13/22
+amount: -70.0
+transaction:
+description: Transfer from checking
+date: 12/13/22
+amount: 85.0
+transaction:
+description: Transfer from checking
+date: 12/13/22
+amount: 100.0
 END
 checkingTransactions:
 transaction:
@@ -71,4 +123,16 @@ transaction:
 description: Transfer to checking
 date: 12/03/22
 amount: -25
+transaction:
+description: Transfer from savings
+date: 12/13/22
+amount: 70.0
+transaction:
+description: Transfer to savings
+date: 12/13/22
+amount: -85.0
+transaction:
+description: Transfer to savings
+date: 12/13/22
+amount: -100.0
 END
