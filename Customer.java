@@ -310,7 +310,11 @@ public class Customer {
         if (amountDouble <= 0) {
             throw new IllegalArgumentException("Invalid input! Please enter a positive number.");
         }
+        // check that the user has enough money in the account they are transferring from
         if (to.equals("checking")) {
+            if (this.getSavingsBalance() < amountDouble) {
+                throw new IllegalArgumentException("You do not have enough money in your savings account!");
+            }
             this.setSavingBalance(this.getSavingsBalance() - amountDouble);
             Transaction savingsTransaction = new Transaction("Transfer to checking", dtf.format(LocalDateTime.now()),
                     -amountDouble);
@@ -322,6 +326,9 @@ public class Customer {
             this.checkingTransactions.add(checkingTransaction);
             addTransaction(checkingTransaction, this.username, "checking");
         } else if (to.equals("savings")) {
+            if (this.getCheckingBalance() < amountDouble) {
+                throw new IllegalArgumentException("You do not have enough money in your checking account!");
+            }
             this.setCheckingBalance(this.getCheckingBalance() - amountDouble);
             Transaction checkingTransaction = new Transaction("Transfer to savings", dtf.format(LocalDateTime.now()),
                     -amountDouble);

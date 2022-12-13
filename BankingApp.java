@@ -21,7 +21,7 @@ public class BankingApp extends JFrame {
 	private int currCard = 1;
 	private CardLayout cObjl;
 	private JTextField username;
-	private JTextField password;
+	private JPasswordField password;
 	private Customer customer;
 	private JPanel accountInfoPanel;
 	private JLabel accountNumLabel;
@@ -89,8 +89,8 @@ public class BankingApp extends JFrame {
 		jPanel5 = new JPanel(new GridBagLayout());
 		jLabel1 = new JLabel("Login Screen");
 		jLabel2 = new JLabel("Main Menu");
-		jLabel3 = new JLabel("Savings Screen");
-		jLabel4 = new JLabel("Checking Screen");
+		jLabel3 = new JLabel("Savings Account Information");
+		jLabel4 = new JLabel("Checking Account Information");
 		jLabel5 = new JLabel("Transfer Screen");
 
 		// start code for login screen
@@ -103,7 +103,8 @@ public class BankingApp extends JFrame {
 		loginErrorMsg.setForeground(Color.RED);
 
 		username = new JTextField(10);
-		password = new JTextField(10);
+		password = new JPasswordField(10);
+		password.setEchoChar('*');
 
 		userPanel.add(userLabel);
 		userPanel.add(username);
@@ -148,7 +149,7 @@ public class BankingApp extends JFrame {
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				try {
-					customer = new Customer(username.getText(), password.getText());
+					customer = new Customer(username.getText(), new String(password.getPassword()));
 				} catch (IllegalArgumentException | IOException e) {
 					loginErrorMsg.setVisible(true);
 					return;
@@ -187,9 +188,9 @@ public class BankingApp extends JFrame {
 		accountInfoPanel = new JPanel(new GridLayout(5, 2, 10, 10));
 		accountNumLabel = new JLabel("Account Number");
 		routingNumLabel = new JLabel("Routing Number");
-		IRLabel = new JLabel("Interest Rate");
-		IRALabel = new JLabel("Interest Accrued over 52 weeks");
-		availableBalLabel = new JLabel("Available Balance");
+		IRLabel = new JLabel("Interest Rate (%)");
+		IRALabel = new JLabel("Interest Accrued over 52 weeks ($)");
+		availableBalLabel = new JLabel("Available Balance ($)");
 		accountNum = customer.getAccountNumber();
 		routingNum = customer.getRoutingNumber();
 		IR = customer.getInterestRate();
@@ -218,7 +219,7 @@ public class BankingApp extends JFrame {
 		transactionHistPanelS = new JPanel(new GridLayout(4, 3, 20, 5));
 		recentTranLabelS = new JLabel("Recent Transactions");
 		dateLabelS = new JLabel("Date");
-		amountLabelS = new JLabel("Amount");
+		amountLabelS = new JLabel("Amount ($)");
 		transactionHistPanelS.add(recentTranLabelS);
 		transactionHistPanelS.add(dateLabelS);
 		transactionHistPanelS.add(amountLabelS);
@@ -253,7 +254,7 @@ public class BankingApp extends JFrame {
 		transactionHistPanelC = new JPanel(new GridLayout(4, 3, 20, 5));
 		recentTranLabelC = new JLabel("Recent Transactions");
 		dateLabelC = new JLabel("Date");
-		amountLabelC = new JLabel("Amount");
+		amountLabelC = new JLabel("Amount ($)");
 		transactionHistPanelC.add(recentTranLabelC);
 		transactionHistPanelC.add(dateLabelC);
 		transactionHistPanelC.add(amountLabelC);
@@ -269,7 +270,7 @@ public class BankingApp extends JFrame {
 		accountBalPanelC = new JPanel(new GridLayout(1, 2, 20, 5));
 		accountBalC = customer.getCheckingBalance();
 		accountBalanceC = new JLabel(String.format("%s", accountBalC));
-		accountBalLabelC = new JLabel("Account Balance");
+		accountBalLabelC = new JLabel("Account Balance ($)");
 
 		accountBalPanelC.add(accountBalLabelC);
 		accountBalPanelC.add(accountBalanceC);
@@ -386,7 +387,7 @@ public class BankingApp extends JFrame {
 				String toAccount = (transferList.getSelectedIndex() == 0) ? "savings" : "checking";
 				try {
 					customer.transferMoney(transferTextField.getText(), toAccount);
-					transferValMsg.setText("Transfer Success!");
+					transferValMsg.setText("Transfer Successful!");
 					transferValMsg.setForeground(Color.GREEN);
 					transferValMsg.setVisible(true);
 				} catch (FileNotFoundException | IllegalArgumentException e) {
