@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.swing.*;
 
 public class BankingApp extends JFrame {
-
 	private JPanel jPanel1;
 	private JPanel jPanel2;
 	private JPanel jPanel3;
@@ -28,7 +27,7 @@ public class BankingApp extends JFrame {
 	private JLabel routingNumLabel;
 	private JLabel IRLabel;
 	private JLabel IRALabel;
-	private JLabel avaliableBalLabel;
+	private JLabel availableBalLabel;
 	private int accountNum;
 	private int routingNum;
 	private double IR;
@@ -63,8 +62,8 @@ public class BankingApp extends JFrame {
 	private String trans2C;
 	private String date1C;
 	private String date2C;
-	double amount1C;
-	double amount2C;
+	private double amount1C;
+	private double amount2C;
 	private JLabel recentTranLabel1C;
 	private JLabel dateLabel1C;
 	private JLabel amountLabel1C;
@@ -229,7 +228,7 @@ public class BankingApp extends JFrame {
 		routingNumLabel = new JLabel("Routing Number");
 		IRLabel = new JLabel("Interest Rate");
 		IRALabel = new JLabel("Interest Accrued over 52 weeks");
-		avaliableBalLabel = new JLabel("Avaliable Balance");
+		availableBalLabel = new JLabel("Available Balance");
 		accountNum = customer.getAccountNumber();
 		routingNum = customer.getRoutingNumber();
 		IR = customer.getInterestRate();
@@ -250,7 +249,7 @@ public class BankingApp extends JFrame {
 		accountInfoPanel.add(IRL);
 		accountInfoPanel.add(IRALabel);
 		accountInfoPanel.add(IRAL);
-		accountInfoPanel.add(avaliableBalLabel);
+		accountInfoPanel.add(availableBalLabel);
 		accountInfoPanel.add(availableBalL);
 
 		// recent transactions panel code
@@ -460,18 +459,15 @@ public class BankingApp extends JFrame {
 				update();
 			}
 		});
-
 	}
 
 	public void update() {
-
 		availableBalL.setText(String.format("%.2f", customer.getSavingsBalance()));
 		accountBalanceC.setText(String.format("%.2f", customer.getCheckingBalance()));
-
 	}
 
 	// main method
-	public static void main(String argvs[]) {
+	public static void main(String args[]) {
 		BankingApp cll = new BankingApp();
 		cll.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cll.setVisible(true);
