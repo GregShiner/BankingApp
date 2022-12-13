@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -95,24 +96,8 @@ public class BankingApp extends JFrame {
 	private GridBagConstraints ls;
 	private JLabel loginErrorMsg;
 	private JLabel transferValMsg = new JLabel();
-	private JLabel rtsDescription1;
-	private JLabel rtsDescription2;
-	private JLabel rtsDescription3;
-	private JLabel rtcDescription1;
-	private JLabel rtcDescription2;
-	private JLabel rtcDescription3;
-	private JLabel rtsDate1;
-	private JLabel rtsDate2;
-	private JLabel rtsDate3;
-	private JLabel rtcDate1;
-	private JLabel rtcDate2;
-	private JLabel rtcDate3;
-	private JLabel rtsAmt1;
-	private JLabel rtsAmt2;
-	private JLabel rtsAmt3;
-	private JLabel rtcAmt1;
-	private JLabel rtcAmt2;
-	private JLabel rtcAmt3;
+	private JLabel[][] savingsRecentTransactions;
+	private JLabel[][] checkingRecentTransactions;
 
 	public BankingApp() {
 		setTitle("Banking App Simulator");
@@ -253,34 +238,23 @@ public class BankingApp extends JFrame {
 		accountInfoPanel.add(availableBalL);
 
 		// recent transactions panel code
-		// savings recent trans
+		// savings recent transactions
 		transactionHistPanelS = new JPanel(new GridLayout(6, 3, 5, 5));
 		recentTranLabelS = new JLabel("Recent Transactions");
 		dateLabelS = new JLabel("Date");
 		amountLabelS = new JLabel("Amount");
-		trans1S = "Transfer from Checkings to Savings"; // test
-		trans2S = "Transfer from Savings to Checkings"; // test
-		date1S = "10/11/22"; // test
-		date2S = "12/5/22"; // test
-		amount1S = 100.75; // test
-		amount2S = 205; // test
-		recentTranLabel1S = new JLabel(String.format("%s", trans1S));
-		dateLabel1S = new JLabel(String.format("%s", date1S));
-		amountLabel1S = new JLabel(String.format("%s", amount1S));
-		recentTranLabel2S = new JLabel(String.format("%s", trans2S));
-		dateLabel2S = new JLabel(String.format("%s", date2S));
-		amountLabel2S = new JLabel(String.format("%s", amount2S));
-
 		transactionHistPanelS.add(recentTranLabelS);
 		transactionHistPanelS.add(dateLabelS);
 		transactionHistPanelS.add(amountLabelS);
-		transactionHistPanelS.add(recentTranLabel1S);
-		transactionHistPanelS.add(dateLabel1S);
-		transactionHistPanelS.add(amountLabel1S);
-		transactionHistPanelS.add(recentTranLabel2S);
-		transactionHistPanelS.add(dateLabel2S);
-		transactionHistPanelS.add(amountLabel2S);
-
+		
+		savingsRecentTransactions = new JLabel[3][3];
+		for (int i = 0; i < savingsRecentTransactions.length; i++) {
+			for (int j = 0; j < savingsRecentTransactions[i].length; j++) {
+				savingsRecentTransactions[i][j] = new JLabel("");
+				transactionHistPanelS.add(savingsRecentTransactions[i][j]);
+			}
+		}
+		
 		sa = new GridBagConstraints();
 		sa.gridx = 2;
 		sa.gridy = 0;
@@ -304,28 +278,16 @@ public class BankingApp extends JFrame {
 		recentTranLabelC = new JLabel("Recent Transactions");
 		dateLabelC = new JLabel("Date");
 		amountLabelC = new JLabel("Amount");
-		trans1C = "Transfer from Checkings to Savings"; // test
-		trans2C = "Transfer from Savings to Checkings"; // test
-		date1C = "9/21/22"; // test
-		date2C = "12/10/22"; // test
-		amount1C = 570.75; // test
-		amount2C = 295; // test
-		recentTranLabel1C = new JLabel(String.format("%s", trans1C));
-		dateLabel1C = new JLabel(String.format("%s", date1C));
-		amountLabel1C = new JLabel(String.format("%s", amount1C));
-		recentTranLabel2C = new JLabel(String.format("%s", trans2C));
-		dateLabel2C = new JLabel(String.format("%s", date2C));
-		amountLabel2C = new JLabel(String.format("%s", amount2C));
-		// transaction history code
 		transactionHistPanelC.add(recentTranLabelC);
 		transactionHistPanelC.add(dateLabelC);
 		transactionHistPanelC.add(amountLabelC);
-		transactionHistPanelC.add(recentTranLabel1C);
-		transactionHistPanelC.add(dateLabel1C);
-		transactionHistPanelC.add(amountLabel1C);
-		transactionHistPanelC.add(recentTranLabel2C);
-		transactionHistPanelC.add(dateLabel2C);
-		transactionHistPanelC.add(amountLabel2C);
+		checkingRecentTransactions = new JLabel[3][3];
+		for (int i = 0; i < checkingRecentTransactions.length; i++) {
+			for (int j = 0; j < checkingRecentTransactions[i].length; j++) {
+				checkingRecentTransactions[i][j] = new JLabel("");
+				transactionHistPanelC.add(checkingRecentTransactions[i][j]);
+			}
+		}
 
 		// checking balance
 		accountBalPanelC = new JPanel(new GridLayout(1, 2, 20, 5));
@@ -464,6 +426,19 @@ public class BankingApp extends JFrame {
 	public void update() {
 		availableBalL.setText(String.format("%.2f", customer.getSavingsBalance()));
 		accountBalanceC.setText(String.format("%.2f", customer.getCheckingBalance()));
+		ArrayList<Transaction> savingsTransactions = customer.getSavingsTransactions();
+		ArrayList<Transaction> checkingTransactions = customer.getCheckingTransactions();
+		// update transaction history
+		// get the last five transactions in reverse order
+		for (int i = 0; i < 3; i++) {
+			savingsRecentTransactions[i][0].setText(savingsTransactions.get(savingsTransactions.size() - 1 - i).description);
+			savingsRecentTransactions[i][1].setText(savingsTransactions.get(savingsTransactions.size() - 1 - i).date);
+			savingsRecentTransactions[i][2].setText(String.format("%.2f", savingsTransactions.get(savingsTransactions.size() - 1 - i).amount));
+			checkingRecentTransactions[i][0].setText(checkingTransactions.get(checkingTransactions.size() - 1 - i).description);
+			checkingRecentTransactions[i][1].setText(checkingTransactions.get(checkingTransactions.size() - 1 - i).date);
+			checkingRecentTransactions[i][2].setText(String.format("%.2f", checkingTransactions.get(checkingTransactions.size() - 1 - i).amount));
+		}
+
 	}
 
 	// main method
