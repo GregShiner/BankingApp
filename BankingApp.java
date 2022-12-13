@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;  
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.*;  
   
@@ -182,7 +183,7 @@ public class BankingApp extends JFrame
 					try {
 						customer = new Customer(username.getText(), password.getText());
 						break;
-					} catch (Exception e) {
+					} catch (IllegalArgumentException | IOException e) {
 						loginErrorMsg.setVisible(true);
 						e.printStackTrace();
 					}
